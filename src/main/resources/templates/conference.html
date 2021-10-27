@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header-css">
+    <link th:rel="stylesheet" th:href="@{js/bootstrap-datepicker/dist/css/bootstrap-datepicker.css}"/>
+    <link th:rel="stylesheet" th:href="@{js/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css}"/>
+</head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form autocomplete="off" th:object="${conferenceForm}" class="form" method="POST">
+                <fieldset>
+                    <h1></h1>
+                    <div class="form-group">
+                        <label></label>
+                        <input type="text" th:field="*{name}" class="form-control input-lg" title="name"
+                               autofocus="true"/>
+                        <div class="alert alert-danger error-alert" th:if="${#fields.hasErrors('name')}"
+                             th:errors="*{name}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input type="text" th:field="*{country}" class="form-control input-lg" title="name"
+                        />
+                        <div class="alert alert-danger error-alert" th:if="${#fields.hasErrors('country')}"
+                             th:errors="*{country}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input type="text" th:field="*{city}" class="form-control input-lg" title="name"
+                        />
+                        <div class="alert alert-danger error-alert" th:if="${#fields.hasErrors('city')}"
+                             th:errors="*{city}"></div>
+                    </div>
+                    <div class="col-md-4 mt-5">
+                        <label for="date">Date</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="date" autocomplete="off"
+                                   th:field="*{date}"/>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input type="text" th:field="*{logo}" class="form-control input-lg" title="name"/>
+                        <div class="alert alert-danger error-alert" th:if="${#fields.hasErrors('logo')}"
+                             th:errors="*{logo}"></div>
+                    </div>
+                    <input th:if="${method} == 'new'" class="btn btn-outline-dark" type="submit" th:action="@{new}"/>
+                    <input th:if="${method} == 'edit'" class="btn btn-outline-dark" type="submit"
+                           th:action="@{/edit/{id}}"/>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+<script th:src="@{js/bootstrap-datepicker/dist/js/bootstrap-datepicker.js}"></script>
+<script>
+    $('.input-group.date').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>
+</html>

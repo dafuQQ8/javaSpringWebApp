@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header :: header-css">
+    <title th:text="#{home.title}"></title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="album py-5">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col" th:each="conference : ${conferences}">
+                <div class="card shadow-sm">
+                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"
+                         role="img" th:src="${conference.logo}">
+                    <div class="card-body">
+                        <p class="card-text" th:text="${conference.name}">This is a wider card with supporting text
+                            below as a
+                            natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a sec:authorize="!hasRole('ROLE_ADMIN')"
+                                   type="button" class="btn btn-sm btn-outline-secondary">View</a>
+                                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                                   type="button" class="btn btn-sm btn-outline-secondary"
+                                   th:href="@{'edit/' + ${conference.getId()}}">Edit
+                                </a>
+                                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                                   type="button" class="btn btn-sm btn-outline-secondary"
+                                   th:href="@{'delete/' + ${conference.getId()}}">Delete
+                                </a>
+                            </div>
+                            <small class="text-muted" th:text="${conference.city + ', ' + conference.country}">9
+                                mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <nav aria-label="Page navigation example"
+             th:if="${totalPages > 1}">
+            <ul class="pagination justify-content-left">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link"
+                       th:href="@{${pageUrlPrefix} + ${currentPage - 1}}">Previous</a>
+                </li>
+                <th:block th:if="${totalPages <=10}">
+                    <li th:each="i: ${#numbers.sequence(1, totalPages)}"
+                        th:class="${currentPage != i ? 'page-item' : 'page-item disabled'}"><a
+                            class="page-link"
+                            th:href="@{${pageUrlPrefix} + ${i}}">[[${i}]]</a>
+                    </li>
+                </th:block>
+                <th:block th:if="${totalPages > 10}">
+                    <th:block th:if="${currentPage <= 5 || currentPage > totalPages - 4 }">
+                        <li th:each="i: ${#numbers.sequence(1, 5)}"
+                            th:class="${currentPage !=i ? 'page-item' : 'page-item disabled'}"><a
+                                class="page-link"
+                                th:href="@{${pageUrlPrefix} + ${i}}">[[${i}]]</a>
+                        </li>
+                        <a class="page-link" href="#" th:href="@{${pageUrlPrefix} + 6}">...</a>
+                        <li th:each="i: ${#numbers.sequence(totalPages - 4, totalPages)}"
+                            th:class="${currentPage !=i ? 'page-item' : 'page-item disabled'}"><a
+                                class="page-link"
+                                th:href="@{${pageUrlPrefix} + ${i}}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+                    <th:block th:if="${currentPage > 5 && currentPage < totalPages - 3 }">
+                        <a class="page-link" href="#" th:href="@{${pageUrlPrefix} + ${currentPage - 5}}">...</a>
+                        <li th:each="i: ${#numbers.sequence(currentPage - 4, currentPage + 4)}"
+                            th:class="${currentPage !=i ? 'page-item' : 'page-item disabled'}"><a
+                                class="page-link" href="#"
+                                th:href="@{${pageUrlPrefix} + ${i}}">[[${i}]]</a>
+                        </li>
+                        <a class="page-link" href="#" th:href="@{${pageUrlPrefix} + ${currentPage + 5}}">...</a>
+
+                    </th:block>
+                </th:block>
+
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link"
+                       th:href="@{${pageUrlPrefix} + ${currentPage + 1}}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
